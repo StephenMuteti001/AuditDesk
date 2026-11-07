@@ -1,0 +1,189 @@
+/**
+ * CUSTOM CSS ESCAPE HATCH — AuditDesk
+ *
+ * Contains only what Tailwind utilities cannot express:
+ *  1. Global thin-scrollbar styling (inherited from ScholarDesk)
+ *  2. Keyframes for the cinematic hero background
+ *  3. Composite background paints (grid lines, scrims) used by the hero
+ */
+
+/* ---------------------------------------------------------------
+ * Base typography & thin scrollbar (matches ScholarDesk exactly)
+ * --------------------------------------------------------------- */
+html {
+	scroll-behavior: smooth;
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	background-color: var(--color-background);
+	color: var(--color-foreground);
+	font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	letter-spacing: -0.022em;
+	text-wrap: balance;
+}
+
+*,
+*::before,
+*::after {
+	border-color: var(--color-border);
+}
+
+* {
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-border) var(--color-background);
+}
+
+*::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+	background: var(--color-background);
+}
+
+*::-webkit-scrollbar-thumb {
+	background: var(--color-border);
+	border-radius: 0.375rem;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+	background: var(--color-muted-foreground);
+}
+
+/* Dark panels get an inverted thin scrollbar so it stays legible */
+.scrollbar-inverse {
+	scrollbar-color: color-mix(in oklab, white 24%, transparent) transparent;
+}
+
+.scrollbar-inverse::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.scrollbar-inverse::-webkit-scrollbar-thumb {
+	background: color-mix(in oklab, white 24%, transparent);
+}
+
+.scrollbar-inverse::-webkit-scrollbar-thumb:hover {
+	background: color-mix(in oklab, white 40%, transparent);
+}
+
+section[id] {
+	scroll-margin-top: 5.5rem;
+}
+
+/* ---------------------------------------------------------------
+ * Hero cinematic background
+ * --------------------------------------------------------------- */
+@keyframes ad-drift {
+	0% {
+		transform: scale(1.08) translate3d(0, 0, 0);
+	}
+
+	50% {
+		transform: scale(1.16) translate3d(-1.6%, -1%, 0);
+	}
+
+	100% {
+		transform: scale(1.08) translate3d(0, 0, 0);
+	}
+}
+
+.ad-hero-plate {
+	animation: ad-drift 34s ease-in-out infinite;
+	filter: brightness(0.62) saturate(0.72) contrast(1.05);
+	will-change: transform;
+}
+
+/* Navy scrim that lets the navbar sit directly on the footage */
+.ad-hero-scrim {
+	background: linear-gradient(
+		180deg,
+		color-mix(in oklab, var(--color-primary-deeper) 88%, transparent) 0%,
+		color-mix(in oklab, var(--color-primary-deep) 58%, transparent) 34%,
+		color-mix(in oklab, var(--color-primary-deep) 72%, transparent) 100%
+	);
+}
+
+.ad-hero-scrim-side {
+	background: linear-gradient(
+		90deg,
+		color-mix(in oklab, var(--color-primary-deeper) 92%, transparent) 0%,
+		color-mix(in oklab, var(--color-primary-deep) 62%, transparent) 52%,
+		color-mix(in oklab, var(--color-primary-deep) 10%, transparent) 100%
+	);
+}
+
+
+/* ---------------------------------------------------------------
+ * Entrance + ambient motion
+ * --------------------------------------------------------------- */
+@keyframes ad-rise {
+	from {
+		opacity: 0;
+		transform: translate3d(0, 14px, 0);
+	}
+
+	to {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+.ad-rise {
+	animation: ad-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes ad-ticker {
+	from {
+		transform: translate3d(0, 0, 0);
+	}
+
+	to {
+		transform: translate3d(-50%, 0, 0);
+	}
+}
+
+.ad-ticker {
+	animation: ad-ticker 48s linear infinite;
+	will-change: transform;
+}
+
+@keyframes ad-pulse-dot {
+	0%,
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+
+	50% {
+		opacity: 0.35;
+		transform: scale(0.72);
+	}
+}
+
+.ad-pulse-dot {
+	animation: ad-pulse-dot 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ad-hero-plate,
+	.ad-ticker,
+	.ad-pulse-dot,
+	.ad-rise {
+		animation: none !important;
+	}
+
+	html {
+		scroll-behavior: auto;
+	}
+}
